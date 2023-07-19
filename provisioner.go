@@ -516,6 +516,8 @@ func (p *LocalPathProvisioner) createHelperPod(action ActionType, cmd []string, 
 	scriptMount := addVolumeMount(&helperPod.Spec.Containers[0].VolumeMounts, helperScriptVolName, helperScriptDir)
 	scriptMount.MountPath = helperScriptDir
 	dataMount := addVolumeMount(&helperPod.Spec.Containers[0].VolumeMounts, helperDataVolName, parentDir)
+	dataMount.MountPropagation = new(v1.MountPropagationMode)
+	*dataMount.MountPropagation = v1.MountPropagationBidirectional
 	parentDir = dataMount.MountPath
 	parentDir = strings.TrimSuffix(parentDir, string(filepath.Separator))
 	volumeDir = strings.TrimSuffix(volumeDir, string(filepath.Separator))
